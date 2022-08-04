@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Cadastro da Empresa</title>
+        <style>
+            body {
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            form {
+                text-align: center;
+            }
+
+            h1 {
+                color: green;
+            }
+        </style>
+    </head>
+    <body>
+
+        {% if cadastrado %}
+            <h1>Você se cadastrou com sucesso!</h1>
+            <p>Redirecionando você para o Portal da Empresa em <span id="seconds">3</span> segundos.</p>
+
+        {% else %}
+            {% if erro %}
+                <p style="color: red;">Esse e-mail já foi cadastrado.</p>
+            {% endif %}
+            <form method="POST">{% csrf_token %}
+                <span>Nome da empresa: </span>
+                <input type="text" name="nome"><br><br>
+                <span>E-mail: </span>
+                <input type="text" name="email"><br><br>
+                <span>Senha: </span>
+                <input type="password" name="senha"><br><br>
+                <input type="submit">
+            </form>
+
+            <h3>Já tem uma conta? <a href="login">Login</a></h3>
+        {% endif %}
+        
+        <script>
+            var seconds = 3; // segundos em HTML
+            var foo; // variáveis para clearInterval()
+
+            function redirect() {
+                document.location.href = "{% url 'empresa index' %}";
+            }
+
+            function updateSecs() {
+                document.getElementById("seconds").innerHTML = seconds;
+                seconds--;
+                if (seconds == -1) {
+                    clearInterval(foo);
+                    redirect();
+                }
+            }
+
+            function countdownTimer() {
+                foo = setInterval(function () {
+                    updateSecs()
+                }, 1000);
+            }
+
+            countdownTimer();
+        </script>
+    </body>
+</html>

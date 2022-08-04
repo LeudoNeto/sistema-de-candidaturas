@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Portal da Empresa</title>
+        <style>
+            * {
+                margin: 0
+            }
+
+            .logado {
+                display: flex;
+                height: auto;
+                flex-direction: row;
+            }
+
+            button {
+                margin: 1em;
+            }
+
+            div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+            }
+
+            .styled-table {
+                border-collapse: collapse;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 5em;
+                font-size: 0.9em;
+                font-family: sans-serif;
+                min-width: 400px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            }
+            
+            .styled-table thead tr {
+                background-color: #009879;
+                color: #ffffff;
+                text-align: left;
+            }
+            
+            .styled-table th,
+            .styled-table td {
+                padding: 12px 15px;
+            }
+            
+            .styled-table tbody tr {
+                border-bottom: 1px solid #dddddd;
+            }
+            
+            .styled-table tbody tr:nth-of-type(even) {
+                background-color: #f3f3f3;
+            }
+            
+            .styled-table tbody tr:last-of-type {
+                border-bottom: 2px solid #009879;
+            }
+            
+            .styled-table tbody tr.active-row {
+                font-weight: bold;
+                color: #009879;
+            }
+        </style>
+    </head>
+    <body>
+        {% if candidato %}
+            <div>
+                <h1>Você já está logado como candidato</h1>
+                <h1>O que deseja fazer?</h1>
+
+                <div class="logado">
+                    <a href="{% url 'candidato index' %}"><button>Ir para o portal do candidato</button></a>
+                    <a href="{% url 'mudar grupo' %}"><button>Sair e logar como empresa</button></a>
+                </div>
+            </div>
+        {% else %}
+            <a href="{% url 'logout' %}"><button>Sair</button></a>
+            <div>
+                <h1>Bem vindo, administrador da {{ nome }}</h1><br>
+
+                <h2>Suas vagas:</h2>
+
+                <table class="styled-table" style="margin-top: 3em;">
+                    <thead>
+                        <tr>
+                            <th>Nome da vaga:</th>
+                            <th>Número de candidatos:</th>
+                            <th>Editar</th>
+                            <th>Deletar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vaga in  vagas%}
+                            <tr>
+                                <th>{{ vaga.nome }}</th>
+                                <th>{{ num_de_candidatos }}</th>
+                                <th><form action="editar_vaga" method="POST"> {% csrf_token %} <button name="id_vaga" value="{{ vaga.id_vaga }}" style='border: 0px solid black; cursor: pointer; padding: 1em; margin: 0.5em; background-color: yellow;'>✎</button></form></th>
+                                <th><form action="deletar_vaga" method="POST"> {% csrf_token %}<button name="id_vaga" value="{{ vaga.id_vaga }}" style='border: 0px solid black; cursor: pointer; padding: 1em; margin: 0.5em; background-color: #ff7060; font-weight: bold;'>🗑</button></form></th>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+                <br><a href="criar_vaga"><button>Criar vaga</button></a>
+            </div>
+        {% endif %}
+        
+    </body>
+</html>

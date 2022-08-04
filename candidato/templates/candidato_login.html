@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Login do Candidato</title>
+        <style>
+            body {
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+            }
+
+            form {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+
+        <form method="POST">{% csrf_token %}
+            <span>E-mail: </span>
+            <input type="text" name="email"><br><br>
+            <span>Senha: </span>
+            <input type="password" name="senha"><br>
+            {% if invalid %}
+                <p style="margin-bottom: 0; color: red;">e-mail ou senha inválidos</p>
+            {% endif %}
+            <br><input type="submit">
+        </form>
+
+        <h3>Ainda não tem uma conta? <a href="cadastro">Cadastre-se</a></h3>
+        
+        
+    </body>
+</html>

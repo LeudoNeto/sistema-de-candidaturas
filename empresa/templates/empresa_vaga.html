@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Vaga</title>
+        <style>
+            * {
+                margin: 0
+            }
+
+            button {
+                margin: 1em;
+            }
+
+            .formulario {
+                height: 80vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+            }
+            
+            table {
+                border-spacing: 0.2em 0.5em;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="{% url 'empresa index' %}"><button>Voltar</button></a>
+        <div class="formulario">
+            <h1>Informações da vaga:</h1>
+
+            {% if editar %}
+            
+                <form action="editar_vaga2" method="POST">{% csrf_token %}
+                    <input type="hidden" name="id_vaga" value="{{ vaga.id_vaga }}">
+                    <table>
+                        <tr>
+                            <td><span>Nome da vaga: </span></td>
+                            <td><input required type="text" name='nome' value="{{ vaga.nome }}"></td>
+                        </tr>
+
+                        <tr>
+                            <td><span>Faixa salarial: </span></td>
+                            <td><select name="faixa_salarial">
+                                {% if vaga.faixa_salarial == 1 %}
+                                    <option selected="selected" value="1">Até 1.000</option>
+                                {% else %}
+                                <option value="1">Até 1.000</option>
+                                {% endif %}
+
+                                {% if vaga.faixa_salarial == 2 %}
+                                    <option selected="selected" value="2">De 1.000 a 2.000</option>
+                                {% else %}
+                                <option value="2">De 1.000 a 2.000</option>
+                                {% endif %}
+
+                                {% if vaga.faixa_salarial == 3 %}
+                                    <option selected="selected" value="3">De 2.000 a 3.000</option>
+                                {% else %}
+                                <option value="3">De 2.000 a 3.000</option>
+                                {% endif %}
+
+                                {% if vaga.faixa_salarial == 4 %}
+                                    <option selected="selected" value="4">Acima de 3.000</option>
+                                {% else %}
+                                <option value="4">Acima de 3.000</option>
+                                {% endif %}
+                            </select></td>
+                        </tr>
+
+                        <tr>
+                            <td><span>Escolaridade mínima: </span></td>
+                                <td><select name="escolaridade">
+                                {% if vaga.escolaridade == 1 %}
+                                    <option selected="selected" value="1">Ensino fundamental</option>
+                                {% else %}
+                                <option value="1">Ensino fundamental</option>
+                                {% endif %}
+
+                                {% if vaga.escolaridade == 2 %}
+                                    <option selected="selected" value="2">Ensino médio</option>
+                                {% else %}
+                                <option value="2">Ensino médio</option>
+                                {% endif %}
+
+                                {% if vaga.escolaridade == 3 %}
+                                    <option selected="selected" value="3">Tecnólogo</option>
+                                {% else %}
+                                <option value="3">Tecnólogo</option>
+                                {% endif %}
+
+                                {% if vaga.escolaridade == 4 %}
+                                    <option selected="selected" value="4">Ensino Superior</option>
+                                {% else %}
+                                <option value="4">Ensino Superior</option>
+                                {% endif %}
+
+                                {% if vaga.escolaridade == 5 %}
+                                    <option selected="selected" value="5">Pós / MBA / Mestrado</option>
+                                {% else %}
+                                <option value="5">Pós / MBA / Mestrado</option>
+                                {% endif %}
+
+                                {% if vaga.escolaridade == 6 %}
+                                    <option selected="selected" value="6">Doutorado</option>
+                                {% else %}
+                                <option value="6">Doutorado</option>
+                                {% endif %}
+                                
+                            </select></td>
+                        <tr>
+
+                    </table>
+                    <div style="text-align: center;"><input type="submit"></div>
+
+                </form>
+
+            {% else %}
+
+                <form method="POST">{% csrf_token %}
+                    <table>
+                        <tr>
+                            <td><span>Nome da vaga: </span></td>
+                            <td><input required type="text" name='nome'></td>
+                        </tr>
+
+                        <tr>
+                            <td><span>Faixa salarial: </span></td>
+                            <td><select name="faixa_salarial">
+                                <option value="1">Até 1.000</option>
+                                <option value="2">De 1.000 a 2.000</option>
+                                <option value="3">De 2.000 a 3.000</option>
+                                <option value="4">Acima de 3.000</option>
+                            </select></td>
+                        </tr>
+
+                        <tr>
+                            <td><span>Escolaridade mínima: </span></td>
+                                <td><select name="escolaridade">
+                                <option value="1">Ensino fundamental</option>
+                                <option value="2">Ensino médio</option>
+                                <option value="3">Tecnólogo</option>
+                                <option value="4">Ensino Superior</option>
+                                <option value="5">Pós / MBA / Mestrado</option>
+                                <option value="6">Doutorado</option>
+                            </select></td>
+                        <tr>
+
+                    </table>
+
+                    <div style="text-align: center;"><input type="submit"></div>
+                </form>
+
+            {% endif %}
+        </div>
+        
+    </body>
+</html>
