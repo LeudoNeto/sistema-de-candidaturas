@@ -5,7 +5,23 @@
         <title>Vaga</title>
         <style>
             * {
-                margin: 0
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .btn {
+                transition: 0.5s;
+                padding: 1em;
+                background-color: #add8e6;
+                cursor: pointer;
+                border: 0;
+                border-radius: 0.4em;
+                font-weight: bold;
+            }
+
+            .btn:hover {
+                transition: 0.5s;
+                background-color: #3cdfff;
             }
 
             button {
@@ -27,7 +43,7 @@
         </style>
     </head>
     <body>
-        <a href="{% url 'empresa index' %}"><button>Voltar</button></a>
+        <a href="{% url 'empresa index' %}"><button class="btn">Voltar</button></a>
         <div class="formulario">
             <h1>Informações da vaga:</h1>
 
@@ -113,7 +129,7 @@
                         <tr>
 
                     </table>
-                    <div style="text-align: center;"><input type="submit"></div>
+                    <div style="text-align: center;"><input class="btn" type="submit"></div>
 
                 </form>
 
@@ -150,7 +166,7 @@
 
                     </table>
 
-                    <div style="text-align: center;"><input type="submit"></div>
+                    <div style="text-align: center;"><input class="btn" type="submit"></div>
                 </form>
 
             {% endif %}

@@ -4,6 +4,25 @@
         <meta charset="UTF-8">
         <title>Login do Candidato</title>
         <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .btn {
+                transition: 0.5s;
+                padding: 1em;
+                background-color: #add8e6;
+                cursor: pointer;
+                border: 0;
+                border-radius: 0.4em;
+                font-weight: bold;
+            }
+
+            .btn:hover {
+                transition: 0.5s;
+                background-color: #3cdfff;
+            }
+
             body {
                 height: 100vh;
                 display: flex;
@@ -27,7 +46,7 @@
             {% if invalid %}
                 <p style="margin-bottom: 0; color: red;">e-mail ou senha inválidos</p>
             {% endif %}
-            <br><input type="submit">
+            <br><input class="btn" type="submit">
         </form>
 
         <h3>Ainda não tem uma conta? <a href="cadastro">Cadastre-se</a></h3>

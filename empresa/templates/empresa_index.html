@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
     <head>
@@ -6,7 +5,23 @@
         <title>Portal da Empresa</title>
         <style>
             * {
-                margin: 0
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .btn {
+                transition: 0.5s;
+                padding: 1em;
+                background-color: #add8e6;
+                cursor: pointer;
+                border: 0;
+                border-radius: 0.4em;
+                font-weight: bold;
+            }
+
+            .btn:hover {
+                transition: 0.5s;
+                background-color: #3cdfff;
             }
 
             .logado {
@@ -69,17 +84,17 @@
     </head>
     <body>
         {% if candidato %}
-            <div>
+            <div style="height: 80vh;">
                 <h1>Você já está logado como candidato</h1>
                 <h1>O que deseja fazer?</h1>
 
                 <div class="logado">
-                    <a href="{% url 'candidato index' %}"><button>Ir para o portal do candidato</button></a>
-                    <a href="{% url 'mudar grupo' %}"><button>Sair e logar como empresa</button></a>
+                    <a href="{% url 'candidato index' %}"><button class="btn">Ir para o portal do candidato</button></a>
+                    <a href="{% url 'mudar grupo' %}"><button class="btn">Sair e logar como empresa</button></a>
                 </div>
             </div>
         {% else %}
-            <a href="{% url 'logout' %}"><button>Sair</button></a>
+            <a href="{% url 'logout' %}"><button class="btn">Sair</button></a>
             <div>
                 <h1>Bem vindo, administrador da {{ nome }}</h1><br>
 
@@ -92,21 +107,23 @@
                             <th>Número de candidatos:</th>
                             <th>Editar</th>
                             <th>Deletar</th>
+                            <th>Detalhes</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for vaga in  vagas%}
                             <tr>
                                 <th>{{ vaga.nome }}</th>
-                                <th>{{ num_de_candidatos }}</th>
+                                <th>{{ vaga.num_de_candidatos }}</th>
                                 <th><form action="editar_vaga" method="POST"> {% csrf_token %} <button name="id_vaga" value="{{ vaga.id_vaga }}" style='border: 0px solid black; cursor: pointer; padding: 1em; margin: 0.5em; background-color: yellow;'>✎</button></form></th>
                                 <th><form action="deletar_vaga" method="POST"> {% csrf_token %}<button name="id_vaga" value="{{ vaga.id_vaga }}" style='border: 0px solid black; cursor: pointer; padding: 1em; margin: 0.5em; background-color: #ff7060; font-weight: bold;'>🗑</button></form></th>
+                                <th><form action="detalhes_vaga" method="POST"> {% csrf_token %}<button name="id_vaga" value="{{ vaga.id_vaga }}" style='border: 0px solid black; cursor: pointer; padding: 1em; margin: 0.5em; background-color: #add8e6; font-weight: bold;'>🧐</button></form></th>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
 
-                <br><a href="criar_vaga"><button>Criar vaga</button></a>
+                <br><a href="criar_vaga"><button class="btn">Criar vaga</button></a>
             </div>
         {% endif %}
         

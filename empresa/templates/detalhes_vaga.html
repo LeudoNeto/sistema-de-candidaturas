@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Detalhes da Vaga</title>
+        <style>
+            * {
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .btn {
+                transition: 0.5s;
+                padding: 1em;
+                background-color: #add8e6;
+                cursor: pointer;
+                border: 0;
+                border-radius: 0.4em;
+                font-weight: bold;
+            }
+
+            .btn:hover {
+                transition: 0.5s;
+                background-color: #3cdfff;
+            }
+
+            button {
+                margin: 1em;
+            }
+
+            div {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+            }
+
+            .styled-table {
+                border-collapse: collapse;
+                margin-left: auto;
+                margin-right: auto;
+                margin-top: 5em;
+                font-size: 0.9em;
+                font-family: sans-serif;
+                min-width: 400px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+            }
+            
+            .styled-table thead tr {
+                background-color: #009879;
+                color: #ffffff;
+                text-align: left;
+            }
+            
+            .styled-table th,
+            .styled-table td {
+                padding: 12px 15px;
+            }
+            
+            .styled-table tbody tr {
+                border-bottom: 1px solid #dddddd;
+            }
+            
+            .styled-table tbody tr:nth-of-type(even) {
+                background-color: #f3f3f3;
+            }
+            
+            .styled-table tbody tr:last-of-type {
+                border-bottom: 2px solid #009879;
+            }
+            
+            .styled-table tbody tr.active-row {
+                font-weight: bold;
+                color: #009879;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="{% url 'empresa index' %}"><button class="btn">Voltar</button></a>
+
+        <div>
+            <h1>Detalhes da vaga</h1>
+
+            <table class="styled-table" style="margin-bottom: 3em; margin-top: 1em;">
+                <thead>
+                    <tr>
+                        <th>Nome da Vaga:</th>
+                        <th>Faixa Salarial:</th>
+                        <th>Escolaridade Mínima:</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ vaga.nome }}</td>
+                        <td>
+                            {% if vaga.faixa_salarial == 1 %}
+                                Até 1.000
+                            {% elif vaga.faixa_salarial == 2 %}
+                                De 1.000 a 2.000
+                            {% elif vaga.faixa_salarial == 3 %}
+                                De 2.000 a 3.000
+                            {% else %}
+                                Acima de 3.000
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if vaga.escolaridade == 1 %}
+                                Ensino fundamental
+                            {% elif vaga.escolaridade == 2 %}
+                                Ensino médio
+                            {% elif vaga.escolaridade == 3 %}
+                                Tecnólogo
+                            {% elif vaga.escolaridade == 4 %}
+                                Ensino Superior
+                            {% elif vaga.escolaridade == 5 %}
+                                Pós / MBA / Mestrado
+                            {% else %}
+                                Doutorado
+                            {% endif %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h1>Candidatos:</h1>
+
+            <table class="styled-table" style="margin-top: 1em;">
+                <thead>
+                    <tr>
+                        <th>Nome:</th>
+                        <th>Pretensão Salarial:</th>
+                        <th>Escolaridade</th>
+                        <th>Pontos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for candidatura in candidaturas %}
+                        <tr>
+                            <td>{{ candidatura.nome_do_candidato }}</td>
+                            <td>{{ candidatura.pretensao_salarial }}</td>
+                            <td>
+                                {% if candidatura.escolaridade == 1 %}
+                                    Ensino fundamental
+                                {% elif candidatura.escolaridade == 2 %}
+                                    Ensino médio
+                                {% elif candidatura.escolaridade == 3 %}
+                                    Tecnólogo
+                                {% elif candidatura.escolaridade == 4 %}
+                                    Ensino Superior
+                                {% elif candidatura.escolaridade == 5 %}
+                                    Pós / MBA / Mestrado
+                                {% else %}
+                                    Doutorado
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ candidatura.pontos }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        </div>
+        
+    </body>
+</html>

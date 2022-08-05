@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth.decorators import login_required
+from candidato.models import Candidatura
 
 from empresa.models import Vaga
 
@@ -18,10 +19,16 @@ def index(request):
         return render(request, 'empresa_index.html', context)
         
     vagas = Vaga.objects.filter(email_da_empresa = user.username)
+    num_de_candidatos = {}
+    for vaga in vagas:
+        vaga.num_de_candidatos = 0
+        for candidatura in Candidatura.objects.all():
+            if candidatura.id_vaga == vaga.id_vaga:
+                vaga.num_de_candidatos += 1
+
     context = {
         'nome': user.first_name,
         'vagas': vagas,
-        'num_de_candidatos': len(vagas)
     }
     return render(request, 'empresa_index.html', context)
 
@@ -105,6 +112,7 @@ def editar_vaga(request):
     }
     return render(request, 'empresa_vaga.html', context)
 
+@login_required(login_url="empresa login")
 def editar_vaga2(request):
     vaga = Vaga(
         id_vaga = request.POST.get('id_vaga'),
@@ -116,3 +124,32 @@ def editar_vaga2(request):
     )
     vaga.save()
     return redirect('empresa index')
+
+@login_required(login_url="empresa login")
+def detalhes_vaga(request):
+    id_vaga = request.POST.get('id_vaga')
+    vaga = Vaga.objects.get(id_vaga = id_vaga)
+    candidaturas = Candidatura.objects.filter(id_vaga = id_vaga).all()
+    for candidatura in candidaturas:
+        candidatura.pontos = 0
+        pretensao_salarial = candidatura.pretensao_salarial
+        if pretensao_salarial <= 1000:
+            pretensao_salarial = 1
+        elif pretensao_salarial <= 2000:
+            pretensao_salarial = 2
+        elif pretensao_salarial <= 3000:
+            pretensao_salarial = 3
+        else:
+            pretensao_salarial = 4
+
+        if pretensao_salarial == vaga.faixa_salarial:
+            candidatura.pontos += 1
+        if candidatura.escolaridade >= vaga.escolaridade:
+            candidatura.pontos += 1
+    
+    context = {
+        'vaga': vaga,
+        'candidaturas': candidaturas
+    }
+
+    return render(request, 'detalhes_vaga.html', context)

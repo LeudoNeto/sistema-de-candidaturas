@@ -5,7 +5,22 @@
         <title>Portal do Candidato</title>
         <style>
             * {
-                margin: 0
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .btn {
+                transition: 0.5s;
+                padding: 1em;
+                background-color: #add8e6;
+                cursor: pointer;
+                border: 0;
+                border-radius: 0.4em;
+                font-weight: bold;
+            }
+
+            .btn:hover {
+                transition: 0.5s;
+                background-color: #3cdfff;
             }
 
             h1, h2 {
@@ -72,13 +87,13 @@
     </head>
     <body>
         {% if empresa %}
-            <div>
+            <div style="height: 80vh;">
                 <h1>Você já está logado como empresa</h1>
                 <h1>O que deseja fazer?</h1>
 
                 <div class="logado">
-                    <a href="{% url 'empresa index' %}"><button>Ir para o portal da empresa</button></a>
-                    <a href="{% url 'mudar grupo' %}"><button>Sair e logar como candidato</button></a>
+                    <a href="{% url 'empresa index' %}"><button class="btn">Ir para o portal da empresa</button></a>
+                    <a href="{% url 'mudar grupo' %}"><button class="btn">Sair e logar como candidato</button></a>
                 </div>
             </div>
         {% else %}
@@ -93,19 +108,41 @@
                             <tr>
                                 <th>Nome da vaga:</th>
                                 <th>Nome da empresa:</th>
+                                <th>Inscrever-se</th>
                             </tr>
                         </thead>
                         <tbody>
                             {% for vaga in vagas_disponiveis %}
-                                <form><tr>
+                                <form method="POST" action="inscricao">{% csrf_token %}<tr>
                                     <th>{{ vaga.nome }}</th>
                                     <th>{{ vaga.nome_da_empresa }}</th>
+                                    <th><button type="submit" name="id_vaga" value="{{ vaga.id_vaga }}">Inscrição</button></th>
                                 </tr></form>
                             {% endfor %}
                         </tbody>
                     </table>
 
                 <h2>Vagas em que você se candidatou</h2>
+
+                    <table class="styled-table" style="margin-bottom: 2em; margin-top: 0;">
+                        <thead>
+                            <tr>
+                                <th>Nome da vaga:</th>
+                                <th>Nome da empresa:</th>
+                                <th>Cancelar Inscrição</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for vaga in candidaturas %}
+                                <form method="POST" action="cancelar_inscricao">{% csrf_token %}<tr>
+                                    <th>{{ vaga.nome }}</th>
+                                    <th>{{ vaga.nome_da_empresa }}</th>
+                                    <th><button type="submit" name="id_vaga" value="{{ vaga.id_vaga }}">Cancelar</button></th>
+                                </tr></form>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
             </div>
         {% endif %}
         

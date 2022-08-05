@@ -3,6 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as django_login
 from django.contrib.auth.decorators import login_required
+from candidato.models import Candidatura
 
 from empresa.models import Vaga
 
@@ -16,9 +17,18 @@ def index(request):
         }
         return render(request, 'candidato_index.html', context)
 
+    vagas_disponiveis = list(Vaga.objects.all())
+    candidaturas = Candidatura.objects.filter(email_do_candidato = user.username).all()
+    vagas_candidatadas = []
+    for candidatura in candidaturas:
+        vaga_candidatada = Vaga.objects.get(id_vaga = candidatura.id_vaga)
+        vagas_candidatadas.append(vaga_candidatada)
+        vagas_disponiveis.remove(vaga_candidatada)
+
     context = {
         'nome': user.first_name,
-        'vagas_disponiveis': Vaga.objects.all()
+        'vagas_disponiveis': vagas_disponiveis,
+        'candidaturas': vagas_candidatadas
     }
     return render(request, 'candidato_index.html', context)
 
@@ -68,3 +78,40 @@ def login(request):
                 'invalid': True
             }
             return render(request, 'candidato_login.html', context)
+
+@login_required(login_url="candidato login")
+def inscricao(request):
+    id_vaga = request.POST.get('id_vaga')
+    context = {
+        'vaga': Vaga.objects.filter(id_vaga = id_vaga).first()
+    }
+    return render(request, 'candidato_inscricao.html', context)
+
+@login_required(login_url="candidato login")
+def realizar_inscricao(request):
+    user = request.user
+    id_vaga = request.POST.get('id_vaga')
+    print(id_vaga)
+    vaga = Vaga.objects.filter(id_vaga = id_vaga).first()
+    
+    candidatura = Candidatura(
+        id_vaga = id_vaga,
+        nome_da_empresa = vaga.nome_da_empresa,
+        nome_da_vaga = vaga.nome,
+        nome_do_candidato = user.first_name,
+        email_do_candidato = user.username,
+        pretensao_salarial = request.POST.get('pretensao_salarial'),
+        experiencia = request.POST.get('experiencia'),
+        escolaridade = request.POST.get('escolaridade')
+    )
+
+    candidatura.save()
+    return redirect('candidato index')
+
+@login_required(login_url="candidato login")
+def cancelar_inscricao(request):
+    user = request.user
+    id_vaga = request.POST.get('id_vaga')
+
+    Candidatura.objects.get(id_vaga = id_vaga, email_do_candidato = user.username).delete()
+    return redirect('candidato index')

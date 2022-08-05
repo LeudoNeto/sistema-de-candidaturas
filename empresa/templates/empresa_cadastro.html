@@ -4,6 +4,25 @@
         <meta charset="UTF-8">
         <title>Cadastro da Empresa</title>
         <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .btn {
+                transition: 0.5s;
+                padding: 1em;
+                background-color: #add8e6;
+                cursor: pointer;
+                border: 0;
+                border-radius: 0.4em;
+                font-weight: bold;
+            }
+
+            .btn:hover {
+                transition: 0.5s;
+                background-color: #3cdfff;
+            }
+
             body {
                 height: 100vh;
                 display: flex;
@@ -33,12 +52,12 @@
             {% endif %}
             <form method="POST">{% csrf_token %}
                 <span>Nome da empresa: </span>
-                <input type="text" name="nome"><br><br>
+                <input required type="text" name="nome"><br><br>
                 <span>E-mail: </span>
-                <input type="text" name="email"><br><br>
+                <input required type="email" name="email"><br><br>
                 <span>Senha: </span>
-                <input type="password" name="senha"><br><br>
-                <input type="submit">
+                <input required type="password" name="senha"><br><br>
+                <input class="btn" type="submit">
             </form>
 
             <h3>Já tem uma conta? <a href="login">Login</a></h3>

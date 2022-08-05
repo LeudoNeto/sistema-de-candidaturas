@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <title>Página de Inscrição</title>
+        <style>
+            * {
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            .btn {
+                transition: 0.5s;
+                padding: 1em;
+                background-color: #add8e6;
+                cursor: pointer;
+                border: 0;
+                border-radius: 0.4em;
+                font-weight: bold;
+            }
+
+            .btn:hover {
+                transition: 0.5s;
+                background-color: #3cdfff;
+            }
+
+            button {
+                margin: 1em;
+            }
+
+            .formulario {
+                height: 80vh;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+            }
+            
+            table {
+                border-spacing: 0.2em 0.5em;
+            }
+        </style>
+    </head>
+    <body>
+        <a href="{% url 'candidato index' %}"><button class="btn">Voltar</button></a>
+        <div class="formulario">
+            <div style="text-align: center;"><h1 style="margin-bottom: 1em;">Você está se candidatando para:<br>{{ vaga.nome }}</h1></div>
+
+            <form action="realizar_inscricao" method="POST">{% csrf_token %}
+                <input type="hidden" name="id_vaga" value="{{ vaga.id_vaga }}">
+                <table>
+
+                    <tr>
+                        <td><span>Pretensão salarial: </span></td>
+                        <td><input required type="number" name='pretensao_salarial'></td>
+                    </tr>
+
+                    <tr>
+                        <td><span>Experiência: </span></td>
+                        <td><input required type="text" name='experiencia'></td>
+                    </tr>
+
+                    <tr>
+                        <td><span>Escolaridade: </span></td>
+                            <td><select name="escolaridade">
+                            <option value="1">Ensino fundamental</option>
+                            <option value="2">Ensino médio</option>
+                            <option value="3">Tecnólogo</option>
+                            <option value="4">Ensino Superior</option>
+                            <option value="5">Pós / MBA / Mestrado</option>
+                            <option value="6">Doutorado</option>
+                        </select></td>
+                    <tr>
+
+                </table>
+
+                <div style="text-align: center;"><input class="btn" type="submit"></div>
+            </form>
+        </div>
+        
+    </body>
+</html>
