@@ -12,20 +12,41 @@ from empresa.models import Vaga
 def index(request):
     user = request.user
     if str(user.groups.all()[0]) == 'empresas':
-        context = {
-            'empresa': True
-        }
-        return render(request, 'candidato_index.html', context)
+        return redirect('empresa index')
 
     vagas_disponiveis = list(Vaga.objects.all())
+
+    escolaridades = ['Ensino fundamental', 'Ensino médio', 'Tecnólogo', 'Ensino Superior', 'Pós / MBA / Mestrado', 'Doutorado']
+    faixas_salariais = ['Até 1.000', 'De 1.000 a 2.000', 'De 2.000 a 3.000', 'Acima de 3.000']
+
+    for vaga in vagas_disponiveis:
+        vaga.escolaridade_original = escolaridades[vaga.escolaridade - 1]
+        vaga.faixa_salarial_original = faixas_salariais[vaga.faixa_salarial - 1]
+
     candidaturas = Candidatura.objects.filter(email_do_candidato = user.username).all()
     vagas_candidatadas = []
     for candidatura in candidaturas:
         vaga_candidatada = Vaga.objects.get(id_vaga = candidatura.id_vaga)
+
+        vaga_candidatada.escolaridade_original = escolaridades[vaga.escolaridade - 1]
+        vaga_candidatada.faixa_salarial_original = faixas_salariais[vaga.faixa_salarial - 1]
+
         vagas_candidatadas.append(vaga_candidatada)
         vagas_disponiveis.remove(vaga_candidatada)
 
+    if len(vagas_disponiveis) > 0:
+        vaga1 = True
+    else:
+        vaga1 = False
+
+    if len(vagas_candidatadas) > 0:
+        candidatura1 = True
+    else:
+        candidatura1 = False
+
     context = {
+        'vaga1' : vaga1,
+        'candidatura1' : candidatura1,
         'nome': user.first_name,
         'vagas_disponiveis': vagas_disponiveis,
         'candidaturas': vagas_candidatadas
@@ -71,8 +92,14 @@ def login(request):
         user = authenticate(username = email, password = senha)
 
         if user:
-            django_login(request, user)
-            return redirect('candidato index')
+            if str(user.groups.all()[0]) == 'empresas':
+                context = {
+                    'empresa': True
+                }
+                return render(request, 'candidato_login.html', context)
+            else:
+                django_login(request, user)
+                return redirect('candidato index')
         else:
             context = {
                 'invalid': True
@@ -81,8 +108,9 @@ def login(request):
 
 @login_required(login_url="candidato login")
 def inscricao(request):
-    id_vaga = request.POST.get('id_vaga')
+    id_vaga = request.GET.get('id_vaga')
     context = {
+        'nome': request.user.first_name,
         'vaga': Vaga.objects.filter(id_vaga = id_vaga).first()
     }
     return render(request, 'candidato_inscricao.html', context)
