@@ -3,90 +3,43 @@
     <head>
         <meta charset="UTF-8">
         <title>Cadastro da Empresa</title>
-        <style>
-            * {
-                font-family: Arial, Helvetica, sans-serif;
-            }
-
-            .btn {
-                transition: 0.5s;
-                padding: 1em;
-                background-color: #add8e6;
-                cursor: pointer;
-                border: 0;
-                border-radius: 0.4em;
-                font-weight: bold;
-            }
-
-            .btn:hover {
-                transition: 0.5s;
-                background-color: #3cdfff;
-            }
-
-            body {
-                height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-            }
-
-            form {
-                text-align: center;
-            }
-
-            h1 {
-                color: green;
-            }
-        </style>
+        <link rel="shortcut icon" href="../static/logo.png" type="image/png">
+        <link type="text/css" rel="stylesheet" href="../static/my-styles.css">
+        <link type="text/css" rel="stylesheet" href="../static/login.css">
     </head>
     <body>
+        <div class="navbar">
+            <img src="../static/logo.png" height="48" style="margin: 0 16px; align-self: center;">
+            <h3 style="margin: 0; align-self: center; margin-right: 16px;">Cadastro da Empresa</h3>
+            <a href="../" style="margin: 0; align-self: center;">Voltar para a Página Inicial</a>
+            <div style="margin-left: auto; align-self: center;">
+                <a href="../empresa">Login</a>
+            </div>
+        </div>
 
-        {% if cadastrado %}
-            <h1>Você se cadastrou com sucesso!</h1>
-            <p>Redirecionando você para o Portal da Empresa em <span id="seconds">3</span> segundos.</p>
+        <div class="container center">
+            {% if cadastrado %}
+                <h1>Você se cadastrou com sucesso!</h1>
+                <p>Redirecionando você para o Portal da Empresa em <span id="seconds">3</span> segundos.</p>
 
-        {% else %}
-            {% if erro %}
-                <p style="color: red;">Esse e-mail já foi cadastrado.</p>
+            {% else %}
+            
+                {% if erro %}
+                    <p style="color: red;">Esse e-mail já foi cadastrado.</p>
+                {% endif %}
+                <form style="text-align: center;" method="POST">{% csrf_token %}
+                    <span>Nome da empresa: </span>
+                    <input required type="text" name="nome"><br><br>
+                    <span>E-mail: </span>
+                    <input required type="email" name="email"><br><br>
+                    <span>Senha: </span>
+                    <input required type="password" name="senha"><br><br>
+                    <input class="btn" type="submit">
+                </form>
+
+                <h3>Já tem uma conta? <a href="login">Login</a></h3>
             {% endif %}
-            <form method="POST">{% csrf_token %}
-                <span>Nome da empresa: </span>
-                <input required type="text" name="nome"><br><br>
-                <span>E-mail: </span>
-                <input required type="email" name="email"><br><br>
-                <span>Senha: </span>
-                <input required type="password" name="senha"><br><br>
-                <input class="btn" type="submit">
-            </form>
-
-            <h3>Já tem uma conta? <a href="login">Login</a></h3>
-        {% endif %}
-        
-        <script>
-            var seconds = 3; // segundos em HTML
-            var foo; // variáveis para clearInterval()
-
-            function redirect() {
-                document.location.href = "{% url 'empresa index' %}";
-            }
-
-            function updateSecs() {
-                document.getElementById("seconds").innerHTML = seconds;
-                seconds--;
-                if (seconds == -1) {
-                    clearInterval(foo);
-                    redirect();
-                }
-            }
-
-            function countdownTimer() {
-                foo = setInterval(function () {
-                    updateSecs()
-                }, 1000);
-            }
-
-            countdownTimer();
-        </script>
+        </div>
+        <script src="../static/cadastro.js"></script>
     </body>
 </html>

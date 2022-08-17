@@ -3,54 +3,36 @@
     <head>
         <meta charset="UTF-8">
         <title>Login da Empresa</title>
-        <style>
-            * {
-                font-family: Arial, Helvetica, sans-serif;
-            }
-
-            .btn {
-                transition: 0.5s;
-                padding: 1em;
-                background-color: #add8e6;
-                cursor: pointer;
-                border: 0;
-                border-radius: 0.4em;
-                font-weight: bold;
-            }
-
-            .btn:hover {
-                transition: 0.5s;
-                background-color: #3cdfff;
-            }
-            
-            body {
-                height: 100vh;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-            }
-
-            form {
-                text-align: center;
-            }
-        </style>
+        <link rel="shortcut icon" href="../static/logo.png" type="image/png">
+        <link type="text/css" rel="stylesheet" href="../static/my-styles.css">
+        <link type="text/css" rel="stylesheet" href="../static/login.css">
     </head>
     <body>
+        <div class="navbar">
+            <img src="../static/logo.png" height="48" style="margin: 0 16px; align-self: center;">
+            <h3 style="margin: 0; align-self: center; margin-right: 16px;">Login da Empresa</h3>
+            <a href="../" style="margin: 0; align-self: center;">Voltar para a Página Inicial</a>
+            <div style="margin-left: auto; align-self: center;">
+                <a href="../candidato">Login como Candidato</a>
+            </div>
+        </div>
 
-        <form method="POST">{% csrf_token %}
-            <span>E-mail: </span>
-            <input type="text" name="email"><br><br>
-            <span>Senha: </span>
-            <input type="password" name="senha"><br>
-            {% if invalid %}
-                <p style="margin-bottom: 0; color: red;">e-mail ou senha inválidos</p>
-            {% endif %}
-            <br><input class="btn" type="submit">
-        </form>
-
-        <h3>Ainda não tem uma conta? <a href="cadastro">Cadastre-se</a></h3>
-        
+        <div class="container center">
+            <form method="POST" style="text-align: center;">{% csrf_token %}
+                <span>E-mail: </span>
+                <input required type="email" name="email"><br><br>
+                <span>Senha: </span>
+                <input required type="password" name="senha"><br>
+                {% if invalid %}
+                    <p style="margin-bottom: 0; color: red;">e-mail ou senha inválidos</p>
+                {% elif candidato %}
+                    <p style="margin-bottom: 0; color: red;">Você está tentando logar com um e-mail de candidato.<br>Para acessar o Login do Candidato, <a href="../candidato">Clique aqui</a></p>
+                {% endif %}
+                <div style="text-align: center;"><br><input class="btn" type="submit"></div>
+            </form>
+    
+            <h3>Ainda não tem uma conta? <a href="cadastro">Cadastre-se</a></h3>
+        </div>
         
     </body>
 </html>

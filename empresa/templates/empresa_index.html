@@ -3,129 +3,66 @@
     <head>
         <meta charset="UTF-8">
         <title>Portal da Empresa</title>
-        <style>
-            * {
-                margin: 0;
-                font-family: Arial, Helvetica, sans-serif;
-            }
-
-            .btn {
-                transition: 0.5s;
-                padding: 1em;
-                background-color: #add8e6;
-                cursor: pointer;
-                border: 0;
-                border-radius: 0.4em;
-                font-weight: bold;
-            }
-
-            .btn:hover {
-                transition: 0.5s;
-                background-color: #3cdfff;
-            }
-
-            .logado {
-                display: flex;
-                height: auto;
-                flex-direction: row;
-            }
-
-            button {
-                margin: 1em;
-            }
-
-            div {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                margin: 0;
-            }
-
-            .styled-table {
-                border-collapse: collapse;
-                margin-left: auto;
-                margin-right: auto;
-                margin-top: 5em;
-                font-size: 0.9em;
-                font-family: sans-serif;
-                min-width: 400px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-            }
-            
-            .styled-table thead tr {
-                background-color: #009879;
-                color: #ffffff;
-                text-align: left;
-            }
-            
-            .styled-table th,
-            .styled-table td {
-                padding: 12px 15px;
-            }
-            
-            .styled-table tbody tr {
-                border-bottom: 1px solid #dddddd;
-            }
-            
-            .styled-table tbody tr:nth-of-type(even) {
-                background-color: #f3f3f3;
-            }
-            
-            .styled-table tbody tr:last-of-type {
-                border-bottom: 2px solid #009879;
-            }
-            
-            .styled-table tbody tr.active-row {
-                font-weight: bold;
-                color: #009879;
-            }
-        </style>
+        <link rel="shortcut icon" href="../static/logo.png" type="image/png">
+        <link type="text/css" rel="stylesheet" href="../static/my-styles.css">
+        <link type="text/css" rel="stylesheet" href="../static/vaga.css">
     </head>
     <body>
-        {% if candidato %}
-            <div style="height: 80vh;">
-                <h1>Você já está logado como candidato</h1>
-                <h1>O que deseja fazer?</h1>
-
-                <div class="logado">
-                    <a href="{% url 'candidato index' %}"><button class="btn">Ir para o portal do candidato</button></a>
-                    <a href="{% url 'mudar grupo' %}"><button class="btn">Sair e logar como empresa</button></a>
+        <div>
+            <div class="navbar">
+                <img src="../static/logo.png" height="48" style="margin: 0 16px; align-self: center;">
+                <h3 style="margin: 0; align-self: center;">Portal da Empresa</h3>
+                <div style="margin-left: auto; align-self: center;">
+                    <h4 style="margin: 0; align-self: center;">{{ nome }} | <a href="../logout">Sair</a></h4>
                 </div>
             </div>
-        {% else %}
-            <a href="{% url 'logout' %}"><button class="btn">Sair</button></a>
-            <div>
-                <h1>Bem vindo, administrador da {{ nome }}</h1><br>
 
-                <h2>Suas vagas:</h2>
+            <div class="container">
+                <h1 style="text-align: center; color: #02374e; margin-bottom: 16px;">Bem vindo, administrador da {{ nome }}</h1>
+            
+                <h2 style="color: #02374e; margin-bottom: 8px;">Suas vagas:</h2>
 
-                <table class="styled-table" style="margin-top: 3em;">
-                    <thead>
-                        <tr>
-                            <th>Nome da vaga:</th>
-                            <th>Número de candidatos:</th>
-                            <th>Editar</th>
-                            <th>Deletar</th>
-                            <th>Detalhes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for vaga in  vagas%}
-                            <tr>
-                                <th>{{ vaga.nome }}</th>
-                                <th>{{ vaga.num_de_candidatos }}</th>
-                                <th><form action="editar_vaga" method="POST"> {% csrf_token %} <button name="id_vaga" value="{{ vaga.id_vaga }}" style='border: 0px solid black; cursor: pointer; padding: 1em; margin: 0.5em; background-color: yellow;'>✎</button></form></th>
-                                <th><form action="deletar_vaga" method="POST"> {% csrf_token %}<button name="id_vaga" value="{{ vaga.id_vaga }}" style='border: 0px solid black; cursor: pointer; padding: 1em; margin: 0.5em; background-color: #ff7060; font-weight: bold;'>🗑</button></form></th>
-                                <th><form action="detalhes_vaga" method="POST"> {% csrf_token %}<button name="id_vaga" value="{{ vaga.id_vaga }}" style='border: 0px solid black; cursor: pointer; padding: 1em; margin: 0.5em; background-color: #add8e6; font-weight: bold;'>🧐</button></form></th>
-                            </tr>
+                <div class="vagas">
+                    {% if not vaga1 %}
+                        <a href="criar_vaga" style="text-decoration: none;">
+                                <div class="vaga" style="display: flex; flex-direction: column; align-items: center; justify-content: center; border-style: dashed;">
+                                <img style="margin-top: 16px;" src="../static/empresa/img/mais.png" height="60" width="60">
+                                <h3 style="margin: 16px; text-align: center;">Você não criou nenhuma vaga ainda. Clique aqui para criar.</h3>
+                            </div>
+                        </a>
+                    {% else %}
+                        {% for vaga in vagas %}
+                            <div class="vaga">
+                                <div style="display: flex; margin-bottom: 16px;">
+                                    <div style="width: 100%;">
+                                        <div><h3 style="margin: 0; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">{{ vaga.nome }}</h3></div>
+                                        <div style="display: flex; margin: 8px 0"><img style="margin-right: 8px;" src="../static/empresa/img/salario.png" height="18"><p style="margin: 0;">{{ vaga.faixa_salarial_original }}</p></div>
+                                        <div style="display: flex;"><img style="margin-right: 8px;" src="../static/empresa/img/escolaridade.png" height="18"><p style="margin: 0;">{{ vaga.escolaridade_original }}</p></div>
+                                    </div>
+                                    <div style="justify-self: right; text-align: center; margin-left: 48px;">
+                                        <h3 style="margin: 0;">Número de</h3>
+                                        <h3 style="margin: 0;">Candidatos:</h3>
+                                        <h3 style="margin: 0;">{{ vaga.num_de_candidatos }}</h3>
+                                    </div>
+                                </div>
+
+                                <div style="display: flex; margin-top: auto">
+                                    <div style="justify-self: left; width: 100%;"><form action="detalhes_vaga" method="POST"> {% csrf_token %} <button class="vaga_button" id="detalhes" name="id_vaga" value="{{ vaga.id_vaga }}">Detalhes</button></form></div>
+                                    <div style="justify-self: center; width: 100%;"><form action="editar_vaga" method="POST"> {% csrf_token %} <button class="vaga_button" id="editar" name="id_vaga" value="{{ vaga.id_vaga }}">Editar</button></form></div>
+                                    <div style="justify-self: right;"><form action="deletar_vaga" method="POST"> {% csrf_token %} <button class="vaga_button" id="deletar" name="id_vaga" value="{{ vaga.id_vaga }}">Deletar</button></form></div>
+                                </div>
+
+                            </div>
                         {% endfor %}
-                    </tbody>
-                </table>
+                    {% endif %}
+                </div>
 
-                <br><a href="criar_vaga"><button class="btn">Criar vaga</button></a>
+                <div style="text-align: center; color: #02374e; margin-top: 8px">
+                    <h2>Alguma oportunidade nova?</h2>
+                    <a href="criar_vaga"><button class="btn">Criar vaga</button></a>
+                </div>
+
             </div>
-        {% endif %}
-        
+        </div>
     </body>
 </html>

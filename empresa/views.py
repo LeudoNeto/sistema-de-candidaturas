@@ -13,20 +13,31 @@ def index(request):
     user = request.user
 
     if str(user.groups.all()[0]) == 'candidatos':
-        context = {
-            'candidato': True
-        }
-        return render(request, 'empresa_index.html', context)
+        return redirect('candidato index')
         
     vagas = Vaga.objects.filter(email_da_empresa = user.username)
-    num_de_candidatos = {}
+
     for vaga in vagas:
         vaga.num_de_candidatos = 0
         for candidatura in Candidatura.objects.all():
             if candidatura.id_vaga == vaga.id_vaga:
                 vaga.num_de_candidatos += 1
 
+        escolaridades = ['Ensino fundamental', 'Ensino médio', 'Tecnólogo', 'Ensino Superior', 'Pós / MBA / Mestrado', 'Doutorado']
+
+        vaga.escolaridade_original = escolaridades[vaga.escolaridade - 1]
+
+        faixas_salariais = ['Até 1.000', 'De 1.000 a 2.000', 'De 2.000 a 3.000', 'Acima de 3.000']
+
+        vaga.faixa_salarial_original = faixas_salariais[vaga.faixa_salarial - 1]
+
+    if len(vagas) > 0:
+        vaga1 = True
+    else:
+        vaga1 = False
+
     context = {
+        'vaga1' : vaga1,
         'nome': user.first_name,
         'vagas': vagas,
     }
@@ -71,8 +82,15 @@ def login(request):
         user = authenticate(username = email, password = senha)
 
         if user:
-            django_login(request, user)
-            return redirect('empresa index')
+
+            if str(user.groups.all()[0]) == 'candidatos':
+                context = {
+                    'candidato': True
+                }
+                return render(request, 'empresa_login.html', context)
+            else:
+                django_login(request, user)
+                return redirect('empresa index')
         else:
             context = {
                 'invalid': True
@@ -107,6 +125,7 @@ def editar_vaga(request):
     id_vaga = request.POST.get('id_vaga')
     vaga = Vaga.objects.get(id_vaga = id_vaga)
     context = {
+        'nome' : request.user.first_name,
         'editar': True,
         'vaga': vaga
     }
@@ -148,6 +167,7 @@ def detalhes_vaga(request):
             candidatura.pontos += 1
     
     context = {
+        'nome' : request.user.first_name,
         'vaga': vaga,
         'candidaturas': candidaturas
     }
