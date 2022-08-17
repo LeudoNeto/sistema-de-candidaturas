@@ -3,17 +3,15 @@ from django.contrib.auth import logout as django_logout
 
 # Create your views here.
 def index(request):
-    context = {'lista' : ['oi', 'bom dia']}
-    return render(request, 'index.html', context)
+    user = request.user
+    if user.is_authenticated:
+        if str(user.groups.all()[0]) == 'empresas':
+            return redirect('empresa index')
+        elif str(user.groups.all()[0]) == 'candidatos':
+            return redirect('candidato index')
+
+    return render(request, 'index.html')
 
 def logout(request):
     django_logout(request)
     return redirect('index')
-
-def mudar_grupo(request):
-    if str(request.user.groups.all()[0]) == 'empresas':
-        django_logout(request)
-        return redirect('candidato login')
-    else:
-        django_logout(request)
-        return redirect('empresa login')

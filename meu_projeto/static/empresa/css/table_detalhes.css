@@ -1,0 +1,60 @@
+.styled-table {
+    border-collapse: collapse;
+    font-size: 16px;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.styled-table thead tr th {
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+}
+
+.styled-table thead tr {
+    background-color: #26b0eb;
+    color: #ffffff;
+}
+
+.styled-table th,
+.styled-table td {
+    padding: 15px 18px;
+}
+
+.styled-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.styled-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #26b0eb;
+}
+
+.styled-table tbody tr.active-row {
+    font-weight: bold;
+    color: #26b0eb;
+}
+
+[type=text], [type=number], select {
+    width: auto;
+    background-color: transparent;
+    font-size: 20px;
+    border: 0;
+    border-bottom: 1px solid gray;
+    outline: 0;
+}
+
+[type=text]:focus, [type=number]:focus, select:focus,
+[type=text]:valid, [type=number]:valid, select:valid {
+    border-width: 1px;
+    border-image: linear-gradient(to right, #09796f, #31a3e6);
+    border-image-slice: 1;
+}
+
+.botao_de_enviar {
+    text-align: center;
+    margin-top: 32px;
+}

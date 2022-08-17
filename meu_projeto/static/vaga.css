@@ -1,0 +1,43 @@
+.vagas {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.vaga {
+    display: flex;
+    flex-direction: column;
+    margin: 8px;
+    padding: 16px;
+    width: 320px;
+    border: 2px solid #02374e;
+    border-radius: 16px;
+}
+
+.vaga h3 {
+    color: #02374e;
+}
+
+.vaga_button {
+    transition: 0.5s;
+    cursor: pointer;
+    font-weight: 600;
+    color: #02374e;
+    font-size: 18px;
+    background: none;
+    border: none;
+}
+
+#detalhes:hover {
+    transition: 0.5s;
+    color: #0e75a1;
+}
+
+#editar:hover {
+    transition: 0.5s;
+    color: #b3c000;
+}
+
+#deletar:hover {
+    transition: 0.5s;
+    color: #aa0000;
+}

@@ -1,0 +1,30 @@
+span {
+    font-size: 20px;
+}
+
+[type=text], [type=password], [type=email] {
+    width: auto;
+    background-color: transparent;
+    font-size: 20px;
+    border: 0;
+    border-bottom: 1px solid gray;
+    outline: 0;
+}
+
+[type=text]:focus, [type=password]:focus, [type=email]:focus,
+[type=text]:valid, [type=password]:valid, [type=email]:valid {
+    border-width: 1px;
+    border-image: linear-gradient(to right, #09796f, #31a3e6);
+    border-image-slice: 1;
+}
+
+.center h3 a {
+    transition: 0.5s;
+    text-decoration: none;
+    color: #31a3e6;
+}
+
+.center h3 a:hover {
+    transition: 0.5s;
+    color: #15577e;
+}
