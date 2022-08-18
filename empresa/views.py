@@ -117,7 +117,9 @@ def criar_vaga(request):
 def deletar_vaga(request):
     id_vaga = request.POST.get('id_vaga')
     vaga = Vaga.objects.get(id_vaga = id_vaga)
+    candidaturas = Candidatura.objects.filter(id_vaga = id_vaga).all()
     vaga.delete()
+    candidaturas.delete()
     return redirect('empresa index')
 
 @login_required(login_url="empresa login")
